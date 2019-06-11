@@ -14,6 +14,8 @@ components:
             - MortalityObserver()
 
     vivarium_experiment_dementia.components:
+            - Dementia_SI()
+
 
 configuration:
     input_data:
