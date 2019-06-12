@@ -46,7 +46,7 @@ configuration:
         age_end: 100
 
     dementia_model:
-        cdr_sb_rate: 2.44  # annual change
+        'cdr_rate': 0.406667  # annual increase. corresponds to cdr_sb of 2.44
 
     metrics:
         disability:

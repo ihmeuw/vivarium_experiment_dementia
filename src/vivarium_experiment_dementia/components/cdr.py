@@ -5,7 +5,7 @@ class DementiaProgression:
 
     configuration_defaults = {
         'dementia_model': {
-            'cdr_sb_rate': 2.44  # annual change
+            'cdr_rate': 0.406667  # annual increase. corresponds to cdr_sb of 2.44
         }
     }
 
@@ -86,6 +86,6 @@ class DementiaProgression:
 
         cdr_rate = pd.Series(0.0, index=index)
         with_disease = pop.loc[pop['alzheimers_disease_and_other_dementias'] == 'alzheimers_disease_and_other_dementias'].index
-        cdr_rate.loc[with_disease] = self.config['cdr_sb_rate'] / 6.0
+        cdr_rate.loc[with_disease] = self.config['cdr_rate']
 
         return cdr_rate
