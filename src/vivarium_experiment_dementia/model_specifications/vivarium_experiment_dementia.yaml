@@ -16,6 +16,7 @@ components:
     vivarium_experiment_dementia.components:
             - Dementia_SI()
             - DementiaProgression()
+            - ExistingTreatmentAlgorithm()
 
 
 configuration:
@@ -46,7 +47,9 @@ configuration:
         age_end: 100
 
     dementia_model:
-        cdr_sb_rate: 2.44  # annual change
+        'cdr_rate': 0.406667  # annual increase. corresponds to cdr_sb of 2.44
+        existing_dementia_treatment:
+            coverage: 0.8
 
     metrics:
         disability:
