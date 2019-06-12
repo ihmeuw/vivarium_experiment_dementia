@@ -42,14 +42,17 @@ class DementiaExcessMortalityState(ExcessMortalityState):
         return dw * ((population[self._model] == self.state_id) & (population.alive == 'alive'))
 
 
-def get_dementia_disability_weight(builder):
+def get_dementia_disability_weight(cause, builder):
     # get sequelae from cause
     # load sequelae disability weights
     # make mild, moderate, severe dataframe
 
-    sequelae = builder.data.load(f'alzheimers_disease_and_other_dementias.sequelae')
+    sequelae = builder.data.load(f'cause.alzheimers_disease_and_other_dementias.sequelae')
     seq_dw = []
     for seq in sequelae:
-        seq_dw.append(builder.data.load(f'{seq.name}.disability_weight'))
-    # TODO: ensure the names make sense
-    return pd.concat(seq_dw)
+        df = builder.data.load(f'sequela.{seq}.disability_weight')
+        df = df.set_index(list(set(df.columns) - {'value'}))
+        df = df.rename(columns={'value': seq.split('_')[0]})
+        seq_dw.append(df)
+    return pd.concat(seq_dw, axis=1)
+
