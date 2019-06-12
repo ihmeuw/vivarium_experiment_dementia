@@ -25,7 +25,7 @@ class DementiaProgression:
         self.cdr_rate = builder.value.register_rate_producer('cdr_rate', self._cdr_rate)
 
         self.pop_view = builder.population.get_view(['alzheimers_and_other_dementias', 'cdr'])
-        self.pop_subview = self.pop_view.get_subview(['alzheimers_and_other_dementias'])
+        self.pop_subview = self.pop_view.subview(['alzheimers_and_other_dementias'])
 
         self.clock = builder.time.clock()
 
