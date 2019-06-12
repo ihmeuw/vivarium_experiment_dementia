@@ -76,7 +76,7 @@ class DementiaProgression:
         pop['cdr'] += self.cdr_rate(event.index)
 
         # init incident cases cdr to 1.0
-        pop.loc[(pop['alzheimers_disease_and_other_dementias'] == 'alzheimers_disease_and_other_dementias') & (pop['alzheimers_disease_and_other_dementias_event_time'] == self.clock()), 'cdr'] = 1.0
+        pop.loc[pop['alzheimers_disease_and_other_dementias_event_time'] == self.clock(), 'cdr'] = 1.0
 
         self.pop_view.update(pop)
 
