@@ -54,5 +54,5 @@ def get_dementia_disability_weight(cause, builder):
         df = df.set_index(list(set(df.columns) - {'value'}))
         df = df.rename(columns={'value': seq.split('_')[0]})
         seq_dw.append(df)
-    return pd.concat(seq_dw, axis=1)
+    return pd.concat(seq_dw, axis=1).reset_index()
 
