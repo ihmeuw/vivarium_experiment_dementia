@@ -72,10 +72,10 @@ class DementiaProgression:
         pop = self.pop_view.get(event.index)
         pop = pop.loc[pop['alive'] == 'alive']  # only progress people who are alive
 
-        # tick people forward, cdr_rate is zero if they don't have alzheimers
-        pop['cdr'] += self.cdr_rate(event.index)  # TODO: what is the rescale_post_processor doing? is this correct?
+        # tick people forward, cdr_rate is zero if they don't have dementia
+        pop['cdr'] += self.cdr_rate(event.index)
 
-        # init inicident cases cdr to 1.0
+        # init incident cases cdr to 1.0
         pop.loc[(pop['alzheimers_disease_and_other_dementias'] == 'alzheimers_disease_and_other_dementias') & (pop['alzheimers_disease_and_other_dementias_event_time'] == self.clock()), 'cdr'] = 1.0
 
         self.pop_view.update(pop)
