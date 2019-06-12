@@ -18,7 +18,7 @@ class DementiaExcessMortalityState(ExcessMortalityState):
     def setup(self, builder):
         super().setup(builder)
 
-        self.pop_view = builder.population.get_view(['cdr'])  # TODO: do I need demog columns here?
+        self.pop_view = builder.population.get_view(['alive', 'cdr'])  # TODO: do I need demog columns here?
 
     def compute_disability_weight(self, index):
         # get population view including cdr_sb
@@ -30,16 +30,16 @@ class DementiaExcessMortalityState(ExcessMortalityState):
 
         dw = pd.Series(0, index=index)
 
-        mild_index = population.loc[(1.0 <= population['cdr']) & (population['cdr'] < 2.0)]
-        dw.loc[mild_index] = dw_info(mild_index)
+        mild_index = (1.0 <= population['cdr']) & (population['cdr'] < 2.0)
+        dw.loc[mild_index] = dw_info.loc[mild_index, 'mild']
 
-        moderate_index = population.loc[(2.0 <= population['cdr']) & (population['cdr'] < 3.0)]
-        dw.loc[moderate_index] = dw_info(moderate_index)
+        moderate_index = (2.0 <= population['cdr']) & (population['cdr'] < 3.0)
+        dw.loc[moderate_index] = dw_info.loc[moderate_index, 'moderate']
 
-        severe_index = population.loc[3.0 <= population['cdr']]
-        dw.loc[severe_index] = dw.info(severe_index)
+        severe_index = (3.0 <= population['cdr'])
+        dw.loc[severe_index] = dw_info.loc[severe_index, 'severe']
 
-        return dw * ((population[self._model] == self.state_id) & (population.alive == 'alive'))
+        return dw * (population.alive == 'alive')
 
 
 def get_dementia_disability_weight(cause, builder):
