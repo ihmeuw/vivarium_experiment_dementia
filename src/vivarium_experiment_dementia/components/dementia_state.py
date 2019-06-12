@@ -6,7 +6,7 @@ from vivarium_public_health.disease import ExcessMortalityState
 class DementiaExcessMortalityState(ExcessMortalityState):
 
     def __init__(self):
-        self.cause = 'alzheimers_and_other_dementias'
+        self.cause = 'alzheimers_disease_and_other_dementias'
         super().__init__(self.cause)
         self._get_data_functions['disability_weight'] = get_dementia_disability_weight
 
@@ -24,6 +24,9 @@ class DementiaExcessMortalityState(ExcessMortalityState):
         cdr_sb = self.cdr_sb(index)
 
         dw = pd.Series(0, index=index)
+
+        #use the cdr_sb pipeline and the dw_info to figure out the correct
+        #dw, assign it to the dw series. Then do the multiplication below
 
         # subset and assign dw based on cdr sb levels
         # mild_index =
@@ -46,9 +49,9 @@ def get_dementia_disability_weight(builder):
     # load sequelae disability weights
     # make mild, moderate, severe dataframe
 
-    sequelae = builder.data.load(f'alzheimers_and_other_dementias.sequelae')
+    sequelae = builder.data.load(f'alzheimers_disease_and_other_dementias.sequelae')
     seq_dw = []
     for seq in sequelae:
-        seq_dw.append(builder.data.load())
+        seq_dw.append(builder.data.load(f'{seq.name}.disability_weight'))
 
     return pd.concat(seq_dw)
