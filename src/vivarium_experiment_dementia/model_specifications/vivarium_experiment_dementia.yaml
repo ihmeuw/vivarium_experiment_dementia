@@ -17,6 +17,7 @@ components:
             - Dementia_SI()
             - DementiaProgression()
             - ExistingTreatmentAlgorithm()
+            - ExistingTreatmentEffect()
 
 
 configuration:
@@ -42,7 +43,7 @@ configuration:
             day: 2
         step_size: 1 # Days
     population:
-        population_size: 100
+        population_size: 10_000
         age_start: 0
         age_end: 100
 
@@ -50,6 +51,11 @@ configuration:
         'cdr_rate': 0.406667  # annual increase. corresponds to cdr_sb of 2.44
         existing_dementia_treatment:
             coverage: 0.8
+            initial_effect_mean: 0.78  # in terms of cdr_sb for now
+            initial_effect_sd: 0.19
+            initial_effect_duration: 365  # days
+            stable_effect_mean: 1.43
+            stable_effect_sd: 0.46
 
     metrics:
         disability:
