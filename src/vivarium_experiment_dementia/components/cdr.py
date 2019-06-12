@@ -24,7 +24,7 @@ class DementiaProgression:
         # register cdr_sb_rate value producer to give a hook for treatment to reach in with
         self.cdr_rate = builder.value.register_rate_producer('cdr_rate', self._cdr_rate)
 
-        self.pop_view = builder.population.get_view(['alzheimers_disease_and_other_dementias', 'cdr'])
+        self.pop_view = builder.population.get_view(['alive', 'alzheimers_disease_and_other_dementias', 'cdr'])
         self.pop_subview = self.pop_view.subview(['alzheimers_disease_and_other_dementias'])
 
         self.clock = builder.time.clock()
@@ -34,14 +34,14 @@ class DementiaProgression:
     # TODO: Not everyone starts right at the beginning. Use prevalence or something to mix people around
     def on_initialize_simulants(self, pop_data):
         pop = self.pop_subview.get(pop_data.index)
-
         pop['cdr'] = 0.0
         pop.loc[pop['alzheimers_disease_and_other_dementias'] == 'alzheimers_disease_and_other_dementias', 'cdr'] = 1.0
 
-        self.pop_subview.update(pop)
+        self.pop_view.update(pop)  # had subview here before, didn't work
 
     def on_time_step(self, event):
         pop = self.pop_view.get(event.index)
+        pop = pop.loc[pop['alive'] == 'alive']  # only progress people who are alive
         pop['cdr'] += self.cdr_rate(event.index)  # TODO: what is the rescale_post_processor doing? is this correct?
 
         self.pop_view.update(pop)
