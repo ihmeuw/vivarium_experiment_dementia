@@ -10,38 +10,36 @@ class DementiaExcessMortalityState(ExcessMortalityState):
         super().__init__(self.cause)
         self._get_data_functions['disability_weight'] = get_dementia_disability_weight
 
+
     @property
     def name(self):
         return "dementia_state"
 
     def setup(self, builder):
         super().setup(builder)
-        self.cdr_sb = builder.value.get_value('cdr_sb')
+
+        self.pop_view = builder.population.get_view(['cdr'])  # TODO: do I need demog columns here?
 
     def compute_disability_weight(self, index):
-        population = self.population_view.get(index)
-        dw_info = self._disability_weight(population.index)  # this is the data function
-        cdr_sb = self.cdr_sb(index)
+        # get population view including cdr_sb
+        # get dw info from the data func
+        # determind dws using cdr_sb (make sure you have the right scale, cdr or cdr-sb
+
+        population = self.pop_view.get(index)
+        dw_info = self._disability_weight(index)  # this is the data function
 
         dw = pd.Series(0, index=index)
 
-        #use the cdr_sb pipeline and the dw_info to figure out the correct
-        #dw, assign it to the dw series. Then do the multiplication below
+        mild_index = population.loc[(1.0 <= population['cdr']) & (population['cdr'] < 2.0)]
+        dw.loc[mild_index] = dw_info(mild_index)
 
-        # subset and assign dw based on cdr sb levels
-        # mild_index =
-        # moderate_index
-        # severe_index
-        #
-        # dw.loc[(1. <= dw['cdr_sb'] & dw['cdr_sb'] < 2.), 'mild']
-        # dw.loc[(1. <= dw['cdr_sb'] & dw['cdr_sb'] < 2.), 'moderate']
-        # dw.loc[(1. <= dw['cdr_sb'] & dw['cdr_sb'] < 2.), 'severe']
+        moderate_index = population.loc[(2.0 <= population['cdr']) & (population['cdr'] < 3.0)]
+        dw.loc[moderate_index] = dw_info(moderate_index)
 
-        # return the pandas series
+        severe_index = population.loc[3.0 <= population['cdr']]
+        dw.loc[severe_index] = dw.info(severe_index)
 
-        # determine severity from cdr-sb
-        # self._disability_weight(population.index) * ((population[self._model] == self.state_id)
-        #                                                     & (population.alive == 'alive'))
+        return dw * ((population[self._model] == self.state_id) & (population.alive == 'alive'))
 
 
 def get_dementia_disability_weight(builder):
@@ -53,5 +51,5 @@ def get_dementia_disability_weight(builder):
     seq_dw = []
     for seq in sequelae:
         seq_dw.append(builder.data.load(f'{seq.name}.disability_weight'))
-
+    # TODO: ensure the names make sense
     return pd.concat(seq_dw)
