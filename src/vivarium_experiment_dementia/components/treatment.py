@@ -63,11 +63,11 @@ class ExistingTreatmentEffect:
     configuration_defaults = {
         'dementia_model': {
             'existing_dementia_treatment': {
-                'initial_effect_mean': 0.78,  # in terms of cdr_sb for now
-                'initial_effect_sd': 0.19,
+                'initial_effect_mean': 0.13,  # 0.78 in CDR-SB
+                'initial_effect_sd': 0.031667,  # 0.19 in CDR-SB
                 'initial_effect_duration': 365,  # days
-                'stable_effect_mean': 1.43,
-                'stable_effect_sd': 0.46
+                'stable_effect_mean': 0.23833,  # 1.43 in CDR-SB
+                'stable_effect_sd': 0.076667  # 0.46 in CDR-SB
             }
         }
     }
@@ -109,7 +109,6 @@ class ExistingTreatmentEffect:
         draw = self.randomness[type].get_draw(pop_data.index)
         effect_size = scipy.stats.norm(mean, sd).ppf(draw)
         effect_size[effect_size < 0] = 0.0
-        effect_size = effect_size / 6.0  # TODO: convert to CDR. temporary
         return pd.Series(effect_size, index=pop_data.index)
 
     def adjust_cdr_rate(self, index, exposure):
