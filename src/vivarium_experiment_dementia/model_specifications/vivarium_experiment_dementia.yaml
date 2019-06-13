@@ -47,6 +47,7 @@ configuration:
 
     dementia_model:
         'cdr_rate': 0.406667  # annual increase. corresponds to cdr_sb of 2.44
+        'uniform_cdr_noise': False
 
     metrics:
         disability:

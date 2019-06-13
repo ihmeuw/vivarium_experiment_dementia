@@ -5,7 +5,8 @@ class DementiaProgression:
 
     configuration_defaults = {
         'dementia_model': {
-            'cdr_rate': 0.406667  # annual increase. corresponds to cdr_sb of 2.44
+            'cdr_rate': 0.406667,  # annual increase. corresponds to cdr_sb of 2.44
+            'uniform_cdr_noise': False
         }
     }
 
@@ -62,7 +63,8 @@ class DementiaProgression:
         dementia_cdr = dementia_cdr.replace({'mild': 1.0, 'moderate': 2.0, 'severe': 3.0})
 
         # add uniform noise
-        dementia_cdr += self.randomness_cdr_noise.get_draw(dementia_index)
+        if self.config['uniform_cdr_noise']:
+            dementia_cdr += self.randomness_cdr_noise.get_draw(dementia_index)
 
         # put back in
         pop.loc[dementia_index, 'cdr'] = dementia_cdr
