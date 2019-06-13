@@ -48,7 +48,8 @@ configuration:
         age_end: 100
 
     dementia_model:
-        'cdr_rate': 0.406667  # annual increase. corresponds to cdr_sb of 2.44
+        cdr_rate: 0.406667  # annual increase. corresponds to cdr_sb of 2.44
+        uniform_cdr_noise: False 
         existing_dementia_treatment:
             coverage: 0.8
             initial_effect_mean: 0.13  # 0.78 in CDR-SB
