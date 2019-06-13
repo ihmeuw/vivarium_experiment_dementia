@@ -109,6 +109,7 @@ class ExistingTreatmentEffect:
         draw = self.randomness[type].get_draw(pop_data.index)
         effect_size = scipy.stats.norm(mean, sd).ppf(draw)
         effect_size[effect_size < 0] = 0.0
+
         return pd.Series(effect_size, index=pop_data.index)
 
     def adjust_cdr_rate(self, index, exposure):
@@ -120,3 +121,5 @@ class ExistingTreatmentEffect:
 
         exposure.loc[within_initial_index] = self.initial_individual_effects.loc[within_initial_index]
         exposure.loc[stable_index] = self.stable_individual_effect.loc[stable_index]
+
+        return exposure
