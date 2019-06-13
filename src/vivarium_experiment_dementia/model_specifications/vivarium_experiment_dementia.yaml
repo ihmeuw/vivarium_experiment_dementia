@@ -16,6 +16,8 @@ components:
     vivarium_experiment_dementia.components:
             - Dementia_SI()
             - DementiaProgression()
+            - ExistingTreatmentAlgorithm()
+            - ExistingTreatmentEffect()
 
 
 configuration:
@@ -41,13 +43,20 @@ configuration:
             day: 2
         step_size: 1 # Days
     population:
-        population_size: 100
+        population_size: 10_000
         age_start: 0
         age_end: 100
 
     dementia_model:
-        'cdr_rate': 0.406667  # annual increase. corresponds to cdr_sb of 2.44
-        'uniform_cdr_noise': False
+        cdr_rate: 0.406667  # annual increase. corresponds to cdr_sb of 2.44
+        uniform_cdr_noise: False 
+        existing_dementia_treatment:
+            coverage: 0.8
+            initial_effect_mean: 0.13  # 0.78 in CDR-SB
+            initial_effect_sd: 0.031667  # 0.19 in CDR-SB
+            initial_effect_duration: 365  # days
+            stable_effect_mean: 0.23833  # 1.43 in CDR-SB
+            stable_effect_sd: 0.076667  # 0.46 in CDR-SB
 
     metrics:
         disability:
