@@ -9,15 +9,16 @@ components:
         population:
             - BasePopulation()
             - Mortality()
-        metrics:
-            - Disability()
-            - MortalityObserver()
 
     vivarium_experiment_dementia.components:
             - Dementia_SI()
             - DementiaProgression()
             - ExistingTreatmentAlgorithm()
             - ExistingTreatmentEffect()
+
+    vivarium_public_health.metrics:
+        - Disability()
+        - MortalityObserver()
 
 
 configuration:
