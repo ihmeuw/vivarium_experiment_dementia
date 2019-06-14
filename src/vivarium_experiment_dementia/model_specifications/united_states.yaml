@@ -1,0 +1,70 @@
+plugins:
+    optional:
+        data:
+            controller: "vivarium_public_health.dataset_manager.ArtifactManager"
+            builder_interface: "vivarium_public_health.dataset_manager.ArtifactManagerInterface"
+
+components:
+    vivarium_public_health:
+        population:
+            - BasePopulation()
+            - Mortality()
+
+    vivarium_experiment_dementia.components:
+            - Dementia_SI()
+            - DementiaProgression()
+            - ExistingTreatmentAlgorithm()
+            - ExistingTreatmentEffect()
+
+    vivarium_public_health.metrics:
+        - Disability()
+        - MortalityObserver()
+
+
+configuration:
+    input_data:
+        location: United States
+        input_draw_number: 0
+        artifact_path: /share/costeffectiveness/artifacts/vivarium_experiment_dementia/united_states.hdf
+    interpolation:
+        order: 0
+        extrapolate: False
+    randomness:
+        map_size: 1_000_000
+        key_columns: ['entrance_time']
+        random_seed: 0
+    time:
+        start:
+            year: 2005
+            month: 7
+            day: 2
+        end:
+            year: 2010
+            month: 7
+            day: 2
+        step_size: 1 # Days
+    population:
+        population_size: 10_000
+        age_start: 0
+        age_end: 100
+
+    dementia_model:
+        cdr_rate: 0.406667  # annual increase. corresponds to cdr_sb of 2.44
+        uniform_cdr_noise: False 
+        existing_dementia_treatment:
+            coverage: 0.8
+            initial_effect_mean: 0.13  # 0.78 in CDR-SB
+            initial_effect_sd: 0.031667  # 0.19 in CDR-SB
+            initial_effect_duration: 365  # days
+            stable_effect_mean: 0.23833  # 1.43 in CDR-SB
+            stable_effect_sd: 0.076667  # 0.46 in CDR-SB
+
+    metrics:
+        disability:
+            by_age: False
+            by_sex: False
+            by_year: False
+        mortality:
+            by_age: False
+            by_sex: False
+            by_year: False

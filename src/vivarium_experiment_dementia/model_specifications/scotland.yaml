@@ -9,9 +9,6 @@ components:
         population:
             - BasePopulation()
             - Mortality()
-        metrics:
-            - Disability()
-            - MortalityObserver()
 
     vivarium_experiment_dementia.components:
             - Dementia_SI()
@@ -19,12 +16,16 @@ components:
             - ExistingTreatmentAlgorithm()
             - ExistingTreatmentEffect()
 
+    vivarium_public_health.metrics:
+        - Disability()
+        - MortalityObserver()
+
 
 configuration:
     input_data:
-        location: United States
+        location: Scotland
         input_draw_number: 0
-        artifact_path: /share/costeffectiveness/artifacts/vivarium_experiment_dementia/vivarium_experiment_dementia.hdf
+        artifact_path: /share/costeffectiveness/artifacts/vivarium_experiment_dementia/scotland.hdf
     interpolation:
         order: 0
         extrapolate: False
@@ -48,15 +49,14 @@ configuration:
         age_end: 100
 
     dementia_model:
-        cdr_rate: 0.406667  # annual increase. corresponds to cdr_sb of 2.44
-        uniform_cdr_noise: False 
+        'cdr_rate': 0.406667  # annual increase. corresponds to cdr_sb of 2.44
         existing_dementia_treatment:
             coverage: 0.8
-            initial_effect_mean: 0.13  # 0.78 in CDR-SB
-            initial_effect_sd: 0.031667  # 0.19 in CDR-SB
+            initial_effect_mean: 0.78  # in terms of cdr_sb for now
+            initial_effect_sd: 0.19
             initial_effect_duration: 365  # days
-            stable_effect_mean: 0.23833  # 1.43 in CDR-SB
-            stable_effect_sd: 0.076667  # 0.46 in CDR-SB
+            stable_effect_mean: 1.43
+            stable_effect_sd: 0.46
 
     metrics:
         disability:
